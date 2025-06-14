@@ -1,0 +1,702 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #fce7f3, #f3e8ff, #fecaca);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Rose Petals Animation */
+        .rose-petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .rose-petal {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: linear-gradient(45deg, rgba(236, 72, 153, 0.3), rgba(239, 68, 68, 0.2));
+            border-radius: 50% 50% 50% 0;
+            animation: fall linear infinite;
+            opacity: 0.4;
+        }
+
+        .rose-petal:nth-child(odd) {
+            background: linear-gradient(45deg, rgba(190, 24, 93, 0.25), rgba(236, 72, 153, 0.2));
+            border-radius: 50% 0 50% 50%;
+        }
+
+        .rose-petal:nth-child(3n) {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.15));
+        }
+
+        /* Floating Rose Petals */
+        .floating-petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .floating-petal {
+            position: absolute;
+            width: 10px;
+            height: 14px;
+            background: linear-gradient(45deg, rgba(236, 72, 153, 0.4), rgba(239, 68, 68, 0.3));
+            border-radius: 50% 50% 50% 0;
+            animation: floatPetal 3s ease-out forwards;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Love Letter Section */
+        .love-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+        }
+
+        .love-content {
+            max-width: 64rem;
+            text-align: center;
+        }
+
+        .main-heart {
+            width: 4rem;
+            height: 4rem;
+            font-size: 60px;
+            color: #f87171;
+            margin: 0 auto 2rem;
+            animation: pulse-love 2s ease-in-out infinite;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ec4899, #ef4444, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            animation: fade-in 1s ease-out forwards;
+        }
+
+        .love-text {
+            color: #374151;
+            font-size: 1.25rem;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fade-in 1s ease-out forwards;
+        }
+
+        .love-text:nth-child(4) { animation-delay: 1s; }
+        .love-text:nth-child(5) { animation-delay: 1.5s; }
+        .love-text:nth-child(6) { 
+            animation-delay: 2s; 
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+
+        /* Memory Cards Section */
+        .memory-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+        }
+
+        .memory-container {
+            max-width: 28rem;
+            width: 100%;
+        }
+
+        .memory-title {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #ec4899, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cards-container {
+            position: relative;
+            width: 20rem;
+            height: 24rem;
+            margin: 0 auto;
+            perspective: 1000px;
+            touch-action: pan-y;
+        }
+
+        .memory-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 4px solid #f8bbd9;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card:hover {
+            border-color: #f9a8d4;
+        }
+
+        .card-image {
+            height: 75%;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .memory-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            height: 25%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #fdf2f8, #f3e8ff);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 2rem;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #f87171, #ec4899);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(45deg, #ef4444, #db2777);
+            transform: scale(1.1);
+        }
+
+        .nav-button:active {
+            transform: scale(0.95);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .dots-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: #f8bbd9;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #f87171;
+            width: 2rem;
+        }
+
+        .dot:hover {
+            background: #f9a8d4;
+        }
+
+        .swipe-text {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0.6;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse-love {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes floatPetal {
+            0% {
+                opacity: 0.6;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) rotate(180deg) scale(1.2);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .love-text {
+                font-size: 1rem;
+            }
+            
+            .cards-container {
+                width: 18rem;
+                height: 22rem;
+            }
+        }
+        .download-btn {
+    display: inline-block;
+    background: linear-gradient(45deg, #8b5cf6, #ec4899);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.download-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(45deg, #6d28d9, #db2777);
+}
+
+    </style>
+</head>
+<body>
+    <!-- Rose Petals Background -->
+    <div class="rose-petals" id="rosePetals"></div>
+
+    <!-- Floating Rose Petals -->
+    <div class="floating-petals" id="floatingPetals"></div>
+
+    <div class="container">
+    <!-- Background Music -->
+<audio id="bgMusic" autoplay loop muted playsinline>
+    <source src="WhatsApp Audio 2025-06-14 at 10.36.09_a923981c.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+        <!-- Love Letter Section -->
+        <div class="love-section">
+            <div class="love-content">
+                <div class="main-heart">
+                    ❤️
+  
+
+             </div>
+                
+                <h1 class="main-title">For My Love</h1>
+                
+                <div class="love-text">
+                  So it’s your 20th birthday and everything is going so well. You are too happy because of Eid and after the second day it’s your birthday but I forgot it and I make you sad and I make you cry extremely sorry for that first of all. After that, I don’t try to make you happy so sorry once again. 
+
+Now, let’s talk about what I planned for your birthday first I thought like last time I’ll make union with your friends and we'll make something gift you something and throw a party. But I got the news that this time your vacations are early still I thought I “'d ask them but see Lavisha’s story she’s with her family so I have to change my plan. So I looked at Callander and I saw your birthday is on Sunday so I became a typical Canadian and postponed your celebration. I want to talk with you but I thought about what she’ll think so I thought I wish and I ask your plan is ready stuff will be ready asap. But I forgot that on that day it’s the 8th of June. 
+
+So that was an initial plan. The plan is still the same day is also the same Monday but there’s a small change over the 1st one now I ask you by this site which you make obviously and the 2nd is now we’ll celebrate on the 16th of June instead of the 9th of June.
+                </div>
+                Now let’s talk about last year. So it’s a good year and yeah 1 year of long distance even though there’s 6 months more but 1 year is feeling while we got tested for our relationship. We have multiple fights we have multiple good things we have done a lot things some you know 😝. And yeah there’s multiple new things we tried like new places and many more. Even though we both see a worst semester of our college life in last year. But aahh after those all we still together and touch wood not any big problems came in our life last year let’s pray it going same.
+                <div class="love-text">
+                  
+                </div>
+                     Now it’s time for new year resolution.
+ 1st I’ll become old Bhargav once again and you have to be same all time.
+
+2nd we both focus on our health and start gym asap. Kmk hv mey felava lagyo 6u.
+
+3rd starting diary asap because we promised we will right it from the first day we apart but yeah it’s 1.5 year and I just wrote 3 days.
+
+4th regular video calls both kind. 🎥 
+
+5th now you choose it’s your birthday.
+                <div class="love-text">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Cards Section -->
+        <div class="memory-section">
+            <div class="memory-container">
+                <h2 class="memory-title">Tommorow's Artillery</h2>
+                
+                <div class="cards-container" id="cardsContainer">
+                    <!-- Cards will be dynamically inserted here -->
+                </div>
+
+                <!-- Navigation -->
+                <div class="navigation">
+                    <button class="nav-button" id="prevBtn">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <div class="dots-container" id="dotsContainer">
+                        <!-- Dots will be dynamically inserted here -->
+                    </div>
+                    
+                    <button class="nav-button" id="nextBtn">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <p class="swipe-text">Swipe left or right to browse Artillery</p>
+            </div>
+        </div>
+ <!-- Download Button -->
+<div style="text-align:center; padding: 2rem;">
+    <a href="For_My_Love.html" download class="download-btn">
+        ❤️ Download This Page
+    </a>
+</div>    
+</div>
+
+
+
+    <script>
+        // Memory cards data
+        const memories = [
+            {
+                id: 1,
+                image: "aaaaaaaaa_page_1.jpg",
+                title: "Visit new place",
+                description: "You have 3 options to choose"
+            },
+            {
+                id: 2,
+                image: "aaaaaaaaa_page_2.jpg",
+                title: "Gifts",
+                description: "Let me know which you like most"
+            },
+            {
+                id: 3,
+                image: "aaaaaaaaa_page_3.jpg",
+                title: "Live Performance",
+                description: "Bring your own background music"
+            },
+            {
+                id: 4,
+                image: "page_4.jpg",
+                title: "Movie and games",
+                description: "You have to choose"
+            },
+            {
+                id: 5,
+                image: "aaaaaaaaa_page_5.jpg",
+                title: "caake cutting",
+                description: "તમે તો ખવડાઈ નહીં"
+            }
+        ];
+
+        let currentCard = 0;
+        let isAnimating = false;
+        let petalId = 0;
+
+        // Initialize the app
+        function init() {
+            createRosePetals();
+            createMemoryCards();
+            createDots();
+            updateCardPositions();
+            setupEventListeners();
+        }
+
+        // Create rose petals background
+        function createRosePetals() {
+            const rosePetals = document.getElementById('rosePetals');
+            for (let i = 0; i < 30; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'rose-petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDelay = Math.random() * 10 + 's';
+                petal.style.animationDuration = (8 + Math.random() * 4) + 's';
+                petal.style.width = (6 + Math.random() * 4) + 'px';
+                petal.style.height = (8 + Math.random() * 6) + 'px';
+                rosePetals.appendChild(petal);
+            }
+        }
+
+        // Create memory cards
+        function createMemoryCards() {
+            const container = document.getElementById('cardsContainer');
+            memories.forEach((memory, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${memory.image}" alt="${memory.title}">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${memory.title}</h3>
+                        <p class="card-description">${memory.description}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Create dots
+        function createDots() {
+            const container = document.getElementById('dotsContainer');
+            memories.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.onclick = () => goToCard(index);
+                container.appendChild(dot);
+            });
+        }
+
+        // Update card positions
+        function updateCardPositions() {
+            const cards = document.querySelectorAll('.memory-card');
+            const dots = document.querySelectorAll('.dot');
+
+            cards.forEach((card, index) => {
+                const isActive = index === currentCard;
+                const isNext = index === (currentCard + 1) % memories.length;
+                const isPrev = index === (currentCard - 1 + memories.length) % memories.length;
+
+                let transform = 'translateX(100%) rotateY(45deg) scale(0.8)';
+                let opacity = 0;
+                let zIndex = 1;
+
+                if (isActive) {
+                    transform = 'translateX(0) rotateY(0deg) scale(1)';
+                    opacity = 1;
+                    zIndex = 10;
+                } else if (isPrev) {
+                    transform = 'translateX(-100%) rotateY(-45deg) scale(0.8)';
+                    opacity = 0.6;
+                    zIndex = 5;
+                } else if (isNext) {
+                    transform = 'translateX(100%) rotateY(45deg) scale(0.8)';
+                    opacity = 0.6;
+                    zIndex = 5;
+                }
+
+                card.style.transform = transform;
+                card.style.opacity = opacity;
+                card.style.zIndex = zIndex;
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentCard);
+            });
+        }
+
+        // Create floating rose petal
+        function createFloatingPetal(x, y) {
+            const petalsContainer = document.getElementById('floatingPetals');
+            const petal = document.createElement('div');
+            petal.className = 'floating-petal';
+            petal.style.left = x + 'px';
+            petal.style.top = y + 'px';
+            petal.style.width = (8 + Math.random() * 4) + 'px';
+            petal.style.height = (10 + Math.random() * 6) + 'px';
+            
+            // Random rotation for more natural look
+            const randomRotation = Math.random() * 360;
+            petal.style.transform = `rotate(${randomRotation}deg)`;
+            
+            petalsContainer.appendChild(petal);
+
+            setTimeout(() => {
+                if (petal.parentNode) {
+                    petal.parentNode.removeChild(petal);
+                }
+            }, 3000);
+        }
+
+        // Navigation functions
+        function nextCard() {
+            if (isAnimating) return;
+            isAnimating = true;
+            currentCard = (currentCard + 1) % memories.length;
+            updateCardPositions();
+            createFloatingPetal(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+            setTimeout(() => isAnimating = false, 300);
+        }
+
+        function prevCard() {
+            if (isAnimating) return;
+            isAnimating = true;
+            currentCard = (currentCard - 1 + memories.length) % memories.length;
+            updateCardPositions();
+            createFloatingPetal(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+            setTimeout(() => isAnimating = false, 300);
+        }
+
+        function goToCard(index) {
+            if (isAnimating || index === currentCard) return;
+            isAnimating = true;
+            currentCard = index;
+            updateCardPositions();
+            createFloatingPetal(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+            setTimeout(() => isAnimating = false, 300);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('nextBtn').onclick = nextCard;
+            document.getElementById('prevBtn').onclick = prevCard;
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') nextCard();
+                if (e.key === 'ArrowLeft') prevCard();
+            });
+
+            // Touch/swipe handling
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            const cardsContainer = document.getElementById('cardsContainer');
+            
+            cardsContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            cardsContainer.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                if (touchStartX - touchEndX > 50) {
+                    nextCard();
+                }
+                if (touchEndX - touchStartX > 50) {
+                    prevCard();
+                }
+            }
+
+            // Mouse events for desktop
+            cardsContainer.addEventListener('mousedown', (e) => {
+                touchStartX = e.clientX;
+            });
+
+            cardsContainer.addEventListener('mouseup', (e) => {
+                touchEndX = e.clientX;
+                handleSwipe();
+            });
+        }
+
+        // Start the app when page loads
+        window.onload = init;
+    </script>
+<script>
+  window.addEventListener('click', () => {
+    const music = document.getElementById("bgMusic");
+    music.muted = false;
+    music.play().catch(() => {}); // Ignore play errors
+  }, { once: true });
+</script>
+</body>
+</html>
