@@ -452,7 +452,7 @@ So that was an initial plan. The plan is still the same day is also the same Mon
         </div>
  <!-- Download Button -->
 <div style="text-align:center; padding: 2rem;">
-    <a href="For_My_Love.html" download class="download-btn">
+    <a href="index.html" download class="download-btn">
         ❤️ Download This Page
     </a>
 </div>    
@@ -697,6 +697,12 @@ So that was an initial plan. The plan is still the same day is also the same Mon
     music.muted = false;
     music.play().catch(() => {}); // Ignore play errors
   }, { once: true });
+    bgMusic.play().catch(() => {
+  document.addEventListener("click", () => {
+    bgMusic.play().catch(() => {});
+  }, { once: true });
+});
+
 </script>
 </body>
 </html>
