@@ -381,6 +381,17 @@
     <source src="WhatsApp Audio 2025-06-14 at 10.36.09_a923981c.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
+        <script>
+  const bgMusic = document.getElementById("bgMusic");
+
+  // Attempt to autoplay
+  bgMusic.play().catch(() => {
+    // On first user interaction, play music
+    document.addEventListener("click", () => {
+      bgMusic.play().catch(() => {});
+    }, { once: true });
+  });
+</script>
         <!-- Love Letter Section -->
         <div class="love-section">
             <div class="love-content">
@@ -697,11 +708,7 @@ So that was an initial plan. The plan is still the same day is also the same Mon
     music.muted = false;
     music.play().catch(() => {}); // Ignore play errors
   }, { once: true });
-    bgMusic.play().catch(() => {
-  document.addEventListener("click", () => {
-    bgMusic.play().catch(() => {});
-  }, { once: true });
-});
+   
 
 </script>
 </body>
