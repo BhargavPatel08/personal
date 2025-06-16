@@ -369,6 +369,10 @@
     </style>
 </head>
 <body>
+    <!-- Tap to Begin Overlay -->
+<div id="clickPrompt" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#fff8f8;z-index:1000;display:flex;justify-content:center;align-items:center;font-size:1.5rem;color:#ec4899;cursor:pointer;">
+  💖 Tap to begin 💖
+</div>
     <!-- Rose Petals Background -->
     <div class="rose-petals" id="rosePetals"></div>
 
@@ -710,6 +714,17 @@ So that was an initial plan. The plan is still the same day is also the same Mon
   }, { once: true });
    
 
+</script>
+    <script>
+  const bgMusic = document.getElementById("bgMusic");
+  const clickPrompt = document.getElementById("clickPrompt");
+
+  function startExperience() {
+    bgMusic.play().catch(() => {});
+    clickPrompt.style.display = "none";
+  }
+
+  clickPrompt.addEventListener("click", startExperience);
 </script>
 </body>
 </html>
